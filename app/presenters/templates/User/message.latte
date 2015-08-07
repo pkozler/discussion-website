@@ -1,0 +1,49 @@
+<div class="panel panel-default" id="message-{$message->id}">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-lg-12">
+				<ul class="list-inline pull-left">
+					<li><span class="glyphicon glyphicon-time"></span> {$message->created_at|date:'j. n. Y H:m:s'}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-lg-12">
+				{$message->content}
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-lg-12 comment-footer">
+
+            <!-- Author -->
+            <ul class="list-inline pull-left">
+                <li>
+                    <strong>{if $message->nickname}
+                    {if $message->sender_id}<a n:href="User:show $message->sender_id">{$message->nickname}</a>
+                    {else}{$message->nickname}{/if}
+                    {else}<em>Anonym</em>{/if}</strong>
+                </li>
+
+                <li>
+                    {if $message->email}<a href="mailto:{$message->email}"><span class="glyphicon glyphicon-envelope"></span></a>{/if}
+                </li>											
+            </ul>
+
+            <ul class="list-inline pull-right">
+                <li>
+                    <span class="{if $message->sex == 'male'}fi-male-symbol{elseif $message->sex == 'female'}fi-female-symbol{/if}"></span>
+                </li>
+
+                <li>
+                    {if $message->age}{$message->age}{/if}
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>

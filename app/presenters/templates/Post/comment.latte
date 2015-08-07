@@ -1,0 +1,64 @@
+<div class="panel panel-default" id="comment-{$comment->id}">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-lg-12">
+				<ul class="list-inline pull-left">
+					<li><span class="glyphicon glyphicon-time"></span> {$comment->created_at|date:'j. n. Y H:m:s'}</li>
+				</ul>
+							
+				<ul class="list-inline pull-right">
+
+    				<ul class="list-inline pull-right">
+                     
+                        <li><span data-toggle="tooltip" data-placement="bottom" title="Hodnocení (rozdíl počtů kladných a záporných bodů)" class="glyphicon glyphicon-star"></span><strong> {$comment->score}</strong></li>
+                        <li><span data-toggle="tooltip" data-placement="bottom" title="Kontroverze (počet párů kladný a záporný bod)" class="glyphicon glyphicon-flash"></span><strong> {$comment->controversion}</strong></li>
+                    </ul>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-lg-12">
+				{$comment->content}
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-lg-12 comment-footer">
+            <!-- Author -->
+            <ul class="list-inline pull-left">
+                <li>
+                    <strong>{if $comment->nickname}
+                    {if $comment->user_id}<a n:href="User:show $comment->user_id">{$comment->nickname}</a>
+                    {else}{$comment->nickname}{/if}
+                    {else}<em>Anonym</em>{/if}</strong>
+                </li>
+
+                <li>
+                    {if $comment->email}<a href="mailto:{$comment->email}"><span class="glyphicon glyphicon-envelope"></span></a>{/if}
+                </li>											
+            </ul>
+
+            <div class="control-group pull-right">
+                {if $user->isLoggedIn() && $user->getId() != $post->user_id}
+                    <a n:href="Post:vote like, $comment->user_id, $comment->post_id, $comment->id" class="btn btn-success">Souhlasím</a>
+                    <a n:href="Post:vote hate, $comment->user_id, $comment->post_id, $comment->id" class="btn btn-danger">Nesouhlasím</a>
+                {/if}
+            </div>
+
+            <ul class="list-inline pull-right">
+                <li>
+                    <span class="{if $comment->sex == 'male'}fi-male-symbol{elseif $comment->sex == 'female'}fi-female-symbol{/if}">&nbsp;&nbsp;</span>
+                </li>
+
+                <li>
+                    {if $comment->age}{$comment->age}&nbsp;&nbsp;{/if}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

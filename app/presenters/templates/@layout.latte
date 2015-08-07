@@ -1,0 +1,184 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>{ifset title}{include title|striptags} | {/ifset}Kybersvět</title>
+
+	<!-- Bootstrap Core and Blog CSS -->
+    <!-- <link rel="stylesheet" href="{$basePath}/bower_components/bootstrap/dist/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="{$basePath}/css/bootstrap-dark.min.css">
+    
+    <link rel="stylesheet" href="{$basePath}/css/foundation-icons.css">
+	<link rel="stylesheet" href="{$basePath}/css/style.css">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+	<meta name="viewport" content="width=device-width">
+	
+	{block head}{/block}
+	
+</head>
+
+<body>  
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top" id="slide-navbar" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" n:href="Homepage:about"><strong>Kybersvět</strong></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-navbar-collapse">
+                <ul class="nav navbar-nav main-menu">
+                    {* <li>
+                        <form class="navbar-form navbar-right" role="search">
+                          <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Vyhledávání">
+                          </div>
+                          <button class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                        </form>
+                    </li> *}
+                    <li>
+                        <a n:href="Homepage:default"><span class="glyphicon glyphicon-home"></span> Přehled</a>
+                    </li>
+                    <li>
+                        <a n:href="Post:create"><span class="glyphicon glyphicon-pencil"></span> Nový příspěvek</a>
+                    </li>
+                </ul>
+				<ul class="nav navbar-nav navbar-right main-menu">
+                    {if $user->loggedIn}
+                        <li>
+                            <a n:href="User:show $user->id"><span class="fi-torso"></span> Profil</a>
+                        </li>
+                        <li>
+                            <a n:href="Sign:out"><span class="glyphicon glyphicon-log-out"></span> Odhlášení</a>
+                        </li>
+                    {else}
+                        <li>
+                            <a n:href="Sign:in"><span class="glyphicon glyphicon-log-in"></span> Přihlášení</a>
+                        </li>
+                        <li>
+                            <a n:href="User:create"><span class="fi-torsos-male-female"></span> Registrace</a>
+                        </li>
+                    {/if}
+                    
+                    {* NEJDE ZPROVOZNIT - DOKONČIT POZDĚJI
+                    <li>
+                        {if !$user->loggedIn}
+                            <div class="navbar-btn">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#signInDialog">Přihlášení</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#signUpDialog">Registrace</button>
+                            </div>
+                        {/if}
+                    </li>
+                    *}
+                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+        <!-- Button trigger modal -->
+    
+    {* NEJDE ZPROVOZNIT - DOKONČIT POZDĚJI
+        Pozn.: pro zobrazení chyb formuláře do flash zpráv lze použít:
+    
+        $form->onError[]=function($form){
+			$this->flashMessage(var_export($form->errors,true), 'error');
+			$form->cleanErrors();
+		};
+    
+        Při vytváření formuláře (ale když bude dědit od control, tak nevim).
+        Použít místo toho AJAX - to bude pakárna...
+    
+    {if !$user->loggedIn}
+        <!-- Modal -->
+        <div class="modal fade" id="signInDialog" tabindex="-1" role="dialog" aria-labelledby="signInModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {control signInForm}
+
+                {control forgotPasswordForm}
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="signUpDialog" tabindex="-1" role="dialog" aria-labelledby="signUpModal">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                
+            </div>
+          </div>
+        </div>
+    {/if}
+    *}
+    
+    <!-- Page Content -->
+    <div class="container">
+    	<div n:foreach="$flashes as $flash" 
+    			class={if $flash->type == 'success'}"alert alert-success"
+    					{elseif $flash->type == 'error'}"alert alert-danger"{/if}>
+            <strong>{$flash->message}</strong>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                {include content}
+            </div>
+        </div>
+    
+        {*<footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; www.kybersvet.cz (2015)</p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </footer>*}
+    </div>
+    <!-- /.container -->
+	
+	<!-- Footer -->
+	 <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Copyright &copy; www.kybersvet.cz (2015)</p>
+      </div>
+    </footer>
+
+	{block scripts}
+	<!-- jQuery and Bootstrap Core JavaScript -->
+    <script src="{$basePath}/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="{$basePath}/bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <script src="{$basePath}/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+	<!-- <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> -->
+	<!-- <script src="//nette.github.io/resources/js/netteForms.min.js"></script> -->
+	
+	<script src="{$basePath}/js/netteForms.min.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+	{/block}
+</body>
+</html>

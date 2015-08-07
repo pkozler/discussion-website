@@ -1,0 +1,92 @@
+{block content}
+
+        <div class="row">
+
+            <!-- Blog Entries Column -->
+            <div class="col-md-9">
+
+                <div class="well">
+                    <div>
+                          <ul class="nav nav-pills category-menu">
+                                <li n:foreach="$categories as $category">
+                                    <a n:href="Homepage:default $category->name, null">
+                                        {if $category->name === 'arena' || $category->name === 'forbidden'}
+                                            <span class="text-muted">{$category->description}</span>
+                                        {else}
+                                            {$category->description}
+                                        {/if}
+                                    </a>
+                                </li>
+                          </ul>
+                    </div>
+                </div>
+                    
+                <div class="well">
+                    {if empty($results)}
+                        <h3 class="text-center">
+                             Nebyly nalezeny žádné výsledky...
+                        </h3>
+                    {else}
+                        <h3 class="text-center">
+                             Výsledky vyhledávání:
+                        </h3>
+						<table class="table table-hover">
+                            {* TODO vylepšit výpis *}
+                            {foreach $results as $result}
+                                <tr>
+                                    <td>
+                                        <a n:href="Post:show $result->id">
+                                            {php $snippet = '...' . substr($result->content, max(0, strpos($result->content, $searched) - 50), 100) . '...'; 
+                                            $formattedSnippet = str_replace($searched, "<strong>$searched</strong>", $snippet);
+                                            echo($formattedSnippet);}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </table>
+                    {/if}
+                </div>
+            </div>
+
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-3">
+
+                <!-- Blog Search Well -->
+                <div class="well">
+                    <h4>Vyhledávání</h4>
+                    <form n:name=searchForm class=form>
+                        <div class="input-group">
+                            <input n:name=search type="text" class="form-control">
+                            <span class="input-group-btn">
+                                <button n:name=send class="btn btn-default" type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                        <!-- /.input-group -->
+                    </form>
+                </div>
+
+                <!-- Blog Categories Well -->
+                <div class="well">
+                    <h4>Řazení příspěvků</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ul class="list-unstyled">
+                                <li><a n:href="Homepage:default null, null">Od nejnovějších</a></li>
+                                <li><a n:href="Homepage:default null, views">Od nejčtenějších</a></li>
+                                <li><a n:href="Homepage:default null, comments">Od nejkomentovanějších</a></li>
+                                <li><a n:href="Homepage:default null, likes">Od nejlepších</a></li>
+                                <li><a n:href="Homepage:default null, hates">Od nejhorších</a></li>
+                                <li><a n:href="Homepage:default null, controversions">Od nejkontroverznějších</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.col-lg-6 -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->

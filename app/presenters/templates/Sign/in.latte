@@ -1,0 +1,20 @@
+{block content}
+
+<div class="well">
+
+    <h1 n:block=title class="page-header">Přihlášení</h1>
+
+    <ul n:if="$email">
+        <li>
+            Účet není aktivován. Pokud na e-mailovou adresu
+            zadanou při registraci účtu nedorazil aktivační odkaz,
+            můžete si ho nechat <a n:href="User:resend $email" class="btn-link">zaslat znovu</a>.
+        </li>
+    </ul>
+
+    {control signInForm}
+
+    <span class="pull-right"><a n:href="Sign:reset" class="btn btn-link">Zapomenuté heslo</a></span>
+    <div class="row"></div>
+
+</div>

@@ -1,0 +1,80 @@
+{block content}
+
+<div class="well">
+
+    <h1 n:block="title" class="page-header">Registrovaní uživatelé</h1>
+    <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-10 col-md-offset-1">
+
+                {if empty($users)}
+                    <h3 class="text-center">
+                         Žádní uživatelé...
+                    </h3>
+                {else}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Nickname
+                                </th>
+                                <th>
+                                    E-mail
+                                </th>
+                                <th>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="Počet publikovaných příspěvků" class="glyphicon glyphicon-pencil"></span>
+                                </th>
+                                <th>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="Počet vložených komentářů" class="glyphicon glyphicon-comment"></span>
+                                </th>
+                                <th>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="Počet odeslaných vzkazů" class="glyphicon glyphicon-upload"></span>
+                                </th>
+                                <th>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="Počet přijatých vzkazů" class="glyphicon glyphicon-download"></span>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {foreach $users as $user}
+                                <tr>
+                                    <td>
+                                        <a n:href="User:show $user->id">{$user->nickname}</a>
+                                    </td>
+                                    <td>
+                                        <a href="mailto:{$user->email}">{$user->email}</a>
+                                    </td>
+                                    <td>
+                                        {$user->post_count}
+                                    </td>
+                                    <td>
+                                        {$user->comment_count}
+                                    </td>
+                                    <td>
+                                        {$user->sent_message_count}
+                                    </td>
+                                    <td>
+                                        {$user->received_message_count}
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                {/if}
+
+                <!-- Pager -->
+                <ul n:if="!($paginator->first && $paginator->last)" class="pager">
+                    <li n:if="!$paginator->first" class="previous">
+                        {var $prev = $paginator->page - 1}
+                        <a n:href="User:default $prev">&larr; Předchozí</a>
+                    </li>
+                    <li n:if="!$paginator->last" class="next">
+                        {var $next = $paginator->page + 1}
+                        <a n:href="User:default $next">Další &rarr;</a>
+                    </li>
+                </ul>
+        </div>
+    </div>
+</div>

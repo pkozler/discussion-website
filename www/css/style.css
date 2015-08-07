@@ -1,0 +1,78 @@
+/*!
+ * Start Bootstrap - Blog Home HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  padding-top: 70px;
+}
+
+footer {
+    margin: 50px 0;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  margin-bottom: 0;
+  background-color: #0a1725;
+}
+
+.nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs, .nav-pills {
+    text-align:center;
+}
+
+.container .text-muted {
+  margin: 20px 0;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+code {
+  font-size: 80%;
+}
+
+/* --- */
+
+.panel-primary-link {
+	color: #FFFFFF;
+}
+
+.td-counter {
+    text-align: right;
+}
+
+/*#forgotPasswordForm {
+    display: none;
+}*/
+
+.post-footer {
+    padding: 0px 30px 50px 30px;
+}
+
+.comment-footer {
+    padding: 0px 25px 45px 25px;
+}

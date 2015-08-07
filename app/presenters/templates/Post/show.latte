@@ -1,0 +1,131 @@
+{block content}
+
+<div class="well lead">
+<!-- Blog Post -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Date/Time -->
+                <ul class="list-inline pull-left">
+                    <li><span class="glyphicon glyphicon-time"></span> {$post->created_at|date:'j. n. Y H:m:s'}</li>
+                    <li>Kategorie: {$post->category->description}</li>
+                </ul>
+
+                <ul class="list-inline pull-right">
+                    <li><span data-toggle="tooltip" data-placement="bottom" title="Počet komentářů k příspěvku" class="glyphicon glyphicon-comment"></span><strong> {$post->replies}</strong></li>
+                    <li><span data-toggle="tooltip" data-placement="bottom" title="Hodnocení (rozdíl počtů kladných a záporných bodů)" class="glyphicon glyphicon-star"></span><strong> {$post->score}</strong></li>
+                    <li><span data-toggle="tooltip" data-placement="bottom" title="Kontroverze (počet párů kladný a záporný bod)" class="glyphicon glyphicon-flash"></span><strong> {$post->controversion}</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Title -->
+                <h1 n:block="title" class="text-center">{$post->title}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Post Content -->
+                <p>{$post->content}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12 post-footer">
+                    <!-- Author -->
+                    <ul class="list-inline pull-left">
+                        <li>
+                            <strong>{if $post->nickname}
+                            {if $post->user_id}<a n:href="User:show $post->user_id">{$post->nickname}</a>
+                            {else}{$post->nickname}{/if}
+                            {else}<em>Anonym</em>{/if}</strong>
+                        </li>
+
+                        <li>
+                            {if $post->email}<a href="mailto:{$post->email}"><span class="glyphicon glyphicon-envelope"></span></a>{/if}
+                        </li>
+                    </ul>
+
+                    <div class="control-group pull-right">
+                        {if $user->isLoggedIn() && $user->getId() != $post->user_id}
+                            <a n:href="Post:vote like, $post->user_id, $post->id" class="btn-lg btn-success">Souhlasím</a>
+                            <a n:href="Post:vote hate, $post->user_id, $post->id" class="btn-lg btn-danger">Nesouhlasím</a>
+                        {/if}
+                        <a href="#comment-form" class="btn-lg btn-primary">Odpovědět</a>
+                    </div>
+
+                    <ul class="list-inline pull-right">
+                        <li>
+                            <span class="{if $post->sex == 'male'}fi-male-symbol{elseif $post->sex == 'female'}fi-female-symbol{/if}">&nbsp;&nbsp;</span>
+                        </li>
+
+                        <li>
+                            {if $post->age}{$post->age}&nbsp;&nbsp;{/if}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+{if $bestComment || $worstComment || $controversialComment}
+    <div class="well">
+        {if $bestComment}
+            <h4>Nejvíce pozitivní komentář</h4>
+            {include 'comment.latte', comment => $bestComment}
+        {/if}
+
+        {if $worstComment}
+            <h4>Nejvíce negativní komentář</h4>
+            {include 'comment.latte', comment => $worstComment}
+        {/if}
+
+        {if $controversialComment}
+            <h4>Nejvíce kontroverzní komentář</h4>
+            {include 'comment.latte', comment => $controversialComment}
+        {/if}
+    </div>
+{/if}
+
+{if !empty($comments)}
+    <!-- Blog Comments -->
+    <div class="well">
+        <!-- Posted Comments -->
+        <h4>Všechny komentáře</h4>
+
+        <!-- Comment -->
+        {foreach $comments as $comment}
+            {include 'comment.latte', comment => $comment}
+        {/foreach}
+
+        <!-- Pager -->
+        <ul n:if="!($paginator->first && $paginator->last)" class="pager">
+            <li n:if="!$paginator->first" class="previous">
+                {var $prev = $paginator->page - 1}
+                <a n:href="Post:show $id, $prev">&larr; Předchozí</a>
+            </li>
+            <li n:if="!$paginator->last" class="next">
+                {var $next = $paginator->page + 1}
+                <a n:href="Post:show $id, $next">Další &rarr;</a>
+            </li>
+        </ul>
+    </div>
+{/if}
+
+<!-- Comments Form -->
+<div class="well" id="comment-form">
+    <h4>Vložení komentáře</h4>
+    {control commentForm}
+</div>

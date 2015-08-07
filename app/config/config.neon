@@ -1,0 +1,37 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# http://nette.org/security-warning
+#
+parameters:
+
+
+database:
+	dsn: 'mysql:host=127.0.0.1;dbname=weblog'
+	user: root
+	password: 
+	options:
+		lazy: yes
+
+php:
+	date.timezone: Europe/Prague
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+
+services:
+	- App\Model\UserManager
+	- App\Model\PostManager
+	- App\Model\CommentManager
+	- App\Model\MessageManager
+	# - App\Forms\ISignInFormFactory
+	# - App\Forms\ISignUpFormFactory
+	# - App\Forms\IForgotPasswordFormFactory
+	router: App\RouterFactory::createRouter

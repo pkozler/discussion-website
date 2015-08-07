@@ -1,0 +1,76 @@
+{block content}
+
+<div class="well">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <a n:href="User:default" class="btn btn-link pull-right">Seznam registrovaných uživatelů</a>
+            <h1 n:block="title" class="page-header">{$profile->nickname}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-3">
+            <img class="img-responsive" src="http://placehold.it/256x256" alt="">
+        </div>
+
+        <div class="col-lg-9">
+            <dl class="dl-horizontal">
+                <dt>E-mail:</dt><dd>{$profile->email}</dd>
+                <dt>Věk:</dt><dd>{$profile->age}</dd>
+                <dt>Pohlaví:</dt><dd>{if $profile->sex === 'male'}Muž{else}Žena{/if}</dd>
+                <dt>Role:</dt><dd>{if $profile->role === 'administrator'}Administrátor{else}Uživatel{/if}</dd>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt>Příspěvků:</dt><dd>{$profile->post_count}</dd>
+                <dt>Komentářů:</dt><dd>{$profile->comment_count}</dd>
+                <dt>Vzkazů (odesláno):</dt><dd>{$profile->sent_message_count}</dd>
+                <dt>Vzkazů (přijato):</dt><dd>{$profile->received_message_count}</dd>
+            </dl>
+        </div>
+
+    </div>
+
+    {if $user->isLoggedIn() && $user->getId() == $profile->id}
+        <div class="row">
+            <div class="col-lg-12">
+                <a n:href="User:password $id" class="btn btn-link pull-right">Změna hesla</a>
+            </div>
+        </div>
+    {/if}
+
+</div>
+
+<!-- Blog Comments -->
+
+{if !empty($messages)}
+    <!-- Blog Comments -->
+    <div class="well">
+        <!-- Posted Comments -->
+        <h4>Veřejné vzkazy</h4>
+
+        <!-- Comment -->
+        {foreach $messages as $message}
+            {include 'message.latte', message => $message}
+        {/foreach}
+
+        <!-- Pager -->
+        <ul n:if="!($paginator->first && $paginator->last)" class="pager">
+            <li n:if="!$paginator->first" class="previous">
+                {var $prev = $paginator->page - 1}
+                <a n:href="User:show $id, $prev">&larr; Předchozí</a>
+            </li>
+            <li n:if="!$paginator->last" class="next">
+                {var $next = $paginator->page + 1}
+                <a n:href="User:show $id, $next">Další &rarr;</a>
+            </li>
+        </ul>
+    </div>
+{/if}
+
+<!-- Comments Form -->
+<div class="well" id="message-form">
+    <h4>Vložení vzkazu</h4>
+    {control messageForm}
+</div>
