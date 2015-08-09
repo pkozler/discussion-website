@@ -1,17 +1,5 @@
 # Apache configuration file (see httpd.apache.org/docs/current/mod/quickreference.html)
 
-# !!! po dokončení odstranit !!!
-# Omezení přístupu na IP
-SetEnvIf Remote_Addr "^::1$" good_ip
-SetEnvIf Remote_Addr "^127.0.0.1$" good_ip
-SetEnvIf Remote_Addr "^77.48.26.75$" good_ip
-SetEnvIf Remote_Addr "^90.182.85.197$" good_ip
-SetEnvIf Remote_Addr "^94.142.235.171$" good_ip
-Order deny,allow
-Deny from all
-Allow from env=good_ip
-# !!! po dokončení odstranit !!!
-
 # disable directory listing
 <IfModule mod_autoindex.c>
 	Options -Indexes
