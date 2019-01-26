@@ -11,21 +11,21 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Schema mydb
 -- -----------------------------------------------------
 -- -----------------------------------------------------
--- Schema weblog
+-- Schema discussion_website
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema weblog
+-- Schema discussion_website
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `weblog` DEFAULT CHARACTER SET utf8 COLLATE utf8_czech_ci ;
-USE `weblog` ;
+CREATE SCHEMA IF NOT EXISTS `discussion_website` DEFAULT CHARACTER SET utf8 COLLATE utf8_czech_ci ;
+USE `discussion_website` ;
 
 -- -----------------------------------------------------
--- Table `weblog`.`ip_addresses`
+-- Table `discussion_website`.`ip_addresses`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`ip_addresses` ;
+DROP TABLE IF EXISTS `discussion_website`.`ip_addresses` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`ip_addresses` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`ip_addresses` (
   `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '',
   `ip` BINARY(16) NOT NULL COMMENT '',
   `role` ENUM('verified','normal','supervised','banned') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL DEFAULT 'normal' COMMENT '',
@@ -40,11 +40,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`users`
+-- Table `discussion_website`.`users`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`users` ;
+DROP TABLE IF EXISTS `discussion_website`.`users` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`users` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`users` (
   `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '',
   `ip_id` INT(10) NULL COMMENT '',
   `photo_id` INT(10) NULL DEFAULT NULL COMMENT '',
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `weblog`.`users` (
   `password_token` CHAR(128) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
   `password_token_validity` TIMESTAMP NULL DEFAULT NULL COMMENT '',
   `nickname` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
-  `sex` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
+  `gender` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
   `birthdate` DATE NOT NULL COMMENT '',
   `role` ENUM('administrator','verified','normal','supervised','banned') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL DEFAULT 'normal' COMMENT '',
   `activated` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
@@ -68,12 +68,12 @@ CREATE TABLE IF NOT EXISTS `weblog`.`users` (
   INDEX `fk_users_ip_addresses1_idx` (`ip_id` ASC)  COMMENT '',
   CONSTRAINT `fk_users_photos1`
     FOREIGN KEY (`photo_id`)
-    REFERENCES `weblog`.`user_images` (`id`)
+    REFERENCES `discussion_website`.`user_images` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE,
   CONSTRAINT `fk_users_ip_addresses1`
     FOREIGN KEY (`ip_id`)
-    REFERENCES `weblog`.`ip_addresses` (`id`)
+    REFERENCES `discussion_website`.`ip_addresses` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -82,11 +82,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`user_images`
+-- Table `discussion_website`.`user_images`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`user_images` ;
+DROP TABLE IF EXISTS `discussion_website`.`user_images` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`user_images` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`user_images` (
   `user_id` INT(10) NOT NULL COMMENT '',
   `id` INT(10) NOT NULL COMMENT '',
   `name` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `weblog`.`user_images` (
   INDEX `fk_photos_users1_idx` (`user_id` ASC)  COMMENT '',
   CONSTRAINT `fk_photos_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -106,11 +106,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`categories`
+-- Table `discussion_website`.`categories`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`categories` ;
+DROP TABLE IF EXISTS `discussion_website`.`categories` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`categories` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`categories` (
   `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '',
   `name` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
   `description` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
@@ -123,11 +123,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`posts`
+-- Table `discussion_website`.`posts`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`posts` ;
+DROP TABLE IF EXISTS `discussion_website`.`posts` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`posts` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`posts` (
   `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '',
   `category_id` INT(10) NOT NULL COMMENT '',
   `ip_id` INT(10) NULL COMMENT '',
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `weblog`.`posts` (
   `content` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
   `nickname` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
   `email` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
-  `sex` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
+  `gender` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
   `age` TINYINT(3) UNSIGNED NULL DEFAULT NULL COMMENT '',
   `approved` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
   `showed` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1' COMMENT '',
@@ -147,17 +147,17 @@ CREATE TABLE IF NOT EXISTS `weblog`.`posts` (
   INDEX `fk_posts_categories1_idx` (`category_id` ASC)  COMMENT '',
   CONSTRAINT `fk_posts_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE,
   CONSTRAINT `fk_posts_ip_addresses1`
     FOREIGN KEY (`ip_id`)
-    REFERENCES `weblog`.`ip_addresses` (`id`)
+    REFERENCES `discussion_website`.`ip_addresses` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `fk_posts_categories1`
     FOREIGN KEY (`category_id`)
-    REFERENCES `weblog`.`categories` (`id`)
+    REFERENCES `discussion_website`.`categories` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -166,34 +166,34 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`post_views`
+-- Table `discussion_website`.`post_views`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`post_views` ;
+DROP TABLE IF EXISTS `discussion_website`.`post_views` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`post_views` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`post_views` (
   `post_id` INT(10) NOT NULL COMMENT '',
   `ip_id` INT(10) NOT NULL COMMENT '',
   PRIMARY KEY (`post_id`, `ip_id`)  COMMENT '',
   INDEX `fk_post_views_ip_addresses1_idx` (`ip_id` ASC)  COMMENT '',
   CONSTRAINT `fk_post_views_posts1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `weblog`.`posts` (`id`)
+    REFERENCES `discussion_website`.`posts` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_post_views_ip_addresses1`
     FOREIGN KEY (`ip_id`)
-    REFERENCES `weblog`.`ip_addresses` (`id`)
+    REFERENCES `discussion_website`.`ip_addresses` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`post_reports`
+-- Table `discussion_website`.`post_reports`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`post_reports` ;
+DROP TABLE IF EXISTS `discussion_website`.`post_reports` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`post_reports` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`post_reports` (
   `post_id` INT(10) NOT NULL COMMENT '',
   `user_id` INT(10) NOT NULL COMMENT '',
   `content` VARCHAR(255) NOT NULL COMMENT '',
@@ -203,23 +203,23 @@ CREATE TABLE IF NOT EXISTS `weblog`.`post_reports` (
   INDEX `fk_post_reports_users1_idx` (`user_id` ASC)  COMMENT '',
   CONSTRAINT `fk_post_reports_posts1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `weblog`.`posts` (`id`)
+    REFERENCES `discussion_website`.`posts` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_post_reports_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`comments`
+-- Table `discussion_website`.`comments`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`comments` ;
+DROP TABLE IF EXISTS `discussion_website`.`comments` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`comments` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`comments` (
   `post_id` INT(10) NOT NULL COMMENT '',
   `id` INT(10) NOT NULL COMMENT '',
   `ip_id` INT(10) NULL COMMENT '',
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `weblog`.`comments` (
   `content` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
   `nickname` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
   `email` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
-  `sex` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL COMMENT '',
+  `gender` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL COMMENT '',
   `age` TINYINT(3) UNSIGNED NULL DEFAULT NULL COMMENT '',
   `approved` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
   `showed` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1' COMMENT '',
@@ -241,22 +241,22 @@ CREATE TABLE IF NOT EXISTS `weblog`.`comments` (
   INDEX `fk_comments_comments1_idx` (`parent_post_id` ASC, `parent_id` ASC)  COMMENT '',
   CONSTRAINT `fk_comments_posts1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `weblog`.`posts` (`id`)
+    REFERENCES `discussion_website`.`posts` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_comments_ip_addresses1`
     FOREIGN KEY (`ip_id`)
-    REFERENCES `weblog`.`ip_addresses` (`id`)
+    REFERENCES `discussion_website`.`ip_addresses` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE,
   CONSTRAINT `fk_comments_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE,
   CONSTRAINT `fk_comments_comments1`
     FOREIGN KEY (`parent_post_id` , `parent_id`)
-    REFERENCES `weblog`.`comments` (`post_id` , `id`)
+    REFERENCES `discussion_website`.`comments` (`post_id` , `id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -265,11 +265,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`comment_reports`
+-- Table `discussion_website`.`comment_reports`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`comment_reports` ;
+DROP TABLE IF EXISTS `discussion_website`.`comment_reports` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`comment_reports` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`comment_reports` (
   `post_id` INT(10) NOT NULL COMMENT '',
   `comment_id` INT(10) NOT NULL COMMENT '',
   `user_id` INT(10) NOT NULL COMMENT '',
@@ -280,23 +280,23 @@ CREATE TABLE IF NOT EXISTS `weblog`.`comment_reports` (
   INDEX `fk_comment_reports_comments1_idx` (`post_id` ASC, `comment_id` ASC)  COMMENT '',
   CONSTRAINT `fk_post_reports_users10`
     FOREIGN KEY (`user_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_comment_reports_comments1`
     FOREIGN KEY (`post_id` , `comment_id`)
-    REFERENCES `weblog`.`comments` (`post_id` , `id`)
+    REFERENCES `discussion_website`.`comments` (`post_id` , `id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`invitations`
+-- Table `discussion_website`.`invitations`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`invitations` ;
+DROP TABLE IF EXISTS `discussion_website`.`invitations` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`invitations` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`invitations` (
   `inviting_id` INT(10) NOT NULL COMMENT '',
   `invited_id` INT(10) NOT NULL COMMENT '',
   `post_id` INT(10) NOT NULL COMMENT '',
@@ -305,28 +305,28 @@ CREATE TABLE IF NOT EXISTS `weblog`.`invitations` (
   INDEX `fk_invitations_posts1_idx` (`post_id` ASC)  COMMENT '',
   CONSTRAINT `fk_invitations_users1`
     FOREIGN KEY (`inviting_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_invitations_users2`
     FOREIGN KEY (`invited_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_invitations_posts1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `weblog`.`posts` (`id`)
+    REFERENCES `discussion_website`.`posts` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`comment_votes`
+-- Table `discussion_website`.`comment_votes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`comment_votes` ;
+DROP TABLE IF EXISTS `discussion_website`.`comment_votes` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`comment_votes` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`comment_votes` (
   `user_id` INT(10) NOT NULL COMMENT '',
   `post_id` INT(10) NOT NULL COMMENT '',
   `comment_id` INT(10) NOT NULL COMMENT '',
@@ -336,12 +336,12 @@ CREATE TABLE IF NOT EXISTS `weblog`.`comment_votes` (
   INDEX `fk_comment_votes_comments1_idx` (`post_id` ASC, `comment_id` ASC)  COMMENT '',
   CONSTRAINT `fk_comment_votes_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_comment_votes_comments1`
     FOREIGN KEY (`post_id` , `comment_id`)
-    REFERENCES `weblog`.`comments` (`post_id` , `id`)
+    REFERENCES `discussion_website`.`comments` (`post_id` , `id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -350,11 +350,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`forbidden_keywords`
+-- Table `discussion_website`.`forbidden_keywords`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`forbidden_keywords` ;
+DROP TABLE IF EXISTS `discussion_website`.`forbidden_keywords` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`forbidden_keywords` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`forbidden_keywords` (
   `id` INT(10) NOT NULL AUTO_INCREMENT COMMENT '',
   `keyword` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '',
@@ -365,11 +365,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`messages`
+-- Table `discussion_website`.`messages`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`messages` ;
+DROP TABLE IF EXISTS `discussion_website`.`messages` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`messages` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`messages` (
   `recipient_id` INT(10) NOT NULL COMMENT '',
   `id` INT(10) NOT NULL COMMENT '',
   `ip_id` INT(10) NULL COMMENT '',
@@ -377,7 +377,7 @@ CREATE TABLE IF NOT EXISTS `weblog`.`messages` (
   `content` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
   `nickname` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
   `email` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
-  `sex` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
+  `gender` ENUM('male','female') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NULL DEFAULT NULL COMMENT '',
   `age` TINYINT(3) UNSIGNED NULL DEFAULT NULL COMMENT '',
   `approved` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0' COMMENT '',
   `showed` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1' COMMENT '',
@@ -388,17 +388,17 @@ CREATE TABLE IF NOT EXISTS `weblog`.`messages` (
   INDEX `fk_messages_ip_addresses1_idx` (`ip_id` ASC)  COMMENT '',
   CONSTRAINT `fk_messages_users1`
     FOREIGN KEY (`recipient_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_messages_users2`
     FOREIGN KEY (`sender_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE SET NULL
     ON UPDATE CASCADE,
   CONSTRAINT `fk_messages_ip_addresses1`
     FOREIGN KEY (`ip_id`)
-    REFERENCES `weblog`.`ip_addresses` (`id`)
+    REFERENCES `discussion_website`.`ip_addresses` (`id`)
     ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -407,11 +407,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`post_votes`
+-- Table `discussion_website`.`post_votes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`post_votes` ;
+DROP TABLE IF EXISTS `discussion_website`.`post_votes` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`post_votes` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`post_votes` (
   `user_id` INT(10) NOT NULL COMMENT '',
   `post_id` INT(10) NOT NULL COMMENT '',
   `vote` ENUM('like','hate') CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
@@ -419,12 +419,12 @@ CREATE TABLE IF NOT EXISTS `weblog`.`post_votes` (
   INDEX `fk_post_votes_posts1_idx` (`post_id` ASC)  COMMENT '',
   CONSTRAINT `fk_post_votes_posts1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `weblog`.`posts` (`id`)
+    REFERENCES `discussion_website`.`posts` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_post_votes_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `weblog`.`users` (`id`)
+    REFERENCES `discussion_website`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -433,11 +433,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`post_images`
+-- Table `discussion_website`.`post_images`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`post_images` ;
+DROP TABLE IF EXISTS `discussion_website`.`post_images` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`post_images` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`post_images` (
   `post_id` INT(10) NOT NULL COMMENT '',
   `id` INT(10) NOT NULL COMMENT '',
   `name` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_czech_ci' NOT NULL COMMENT '',
@@ -448,7 +448,7 @@ CREATE TABLE IF NOT EXISTS `weblog`.`post_images` (
   INDEX `fk_post_images_posts1_idx` (`post_id` ASC)  COMMENT '',
   CONSTRAINT `fk_post_images_posts1`
     FOREIGN KEY (`post_id`)
-    REFERENCES `weblog`.`posts` (`id`)
+    REFERENCES `discussion_website`.`posts` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -457,11 +457,11 @@ COLLATE = utf8_czech_ci;
 
 
 -- -----------------------------------------------------
--- Table `weblog`.`comment_images`
+-- Table `discussion_website`.`comment_images`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `weblog`.`comment_images` ;
+DROP TABLE IF EXISTS `discussion_website`.`comment_images` ;
 
-CREATE TABLE IF NOT EXISTS `weblog`.`comment_images` (
+CREATE TABLE IF NOT EXISTS `discussion_website`.`comment_images` (
   `post_id` INT(10) NOT NULL COMMENT '',
   `comment_id` INT(10) NOT NULL COMMENT '',
   `id` INT(10) NOT NULL COMMENT '',
@@ -473,34 +473,34 @@ CREATE TABLE IF NOT EXISTS `weblog`.`comment_images` (
   INDEX `fk_comment_images_comments1_idx` (`post_id` ASC, `comment_id` ASC)  COMMENT '',
   CONSTRAINT `fk_comment_images_comments1`
     FOREIGN KEY (`post_id` , `comment_id`)
-    REFERENCES `weblog`.`comments` (`post_id` , `id`)
+    REFERENCES `discussion_website`.`comments` (`post_id` , `id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_czech_ci;
 
-USE `weblog` ;
+USE `discussion_website` ;
 
 -- -----------------------------------------------------
--- Placeholder table for view `weblog`.`identities`
+-- Placeholder table for view `discussion_website`.`identities`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `weblog`.`identities` (`id` INT, `photo_id` INT, `email` INT, `nickname` INT, `sex` INT, `age` INT, `role` INT);
+CREATE TABLE IF NOT EXISTS `discussion_website`.`identities` (`id` INT, `photo_id` INT, `email` INT, `nickname` INT, `gender` INT, `age` INT, `role` INT);
 
 -- -----------------------------------------------------
--- View `weblog`.`identities`
+-- View `discussion_website`.`identities`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `weblog`.`identities` ;
-DROP TABLE IF EXISTS `weblog`.`identities`;
-USE `weblog`;
-CREATE  OR REPLACE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `identities` AS select `users`.`id` AS `id`,`users`.`photo_id` AS `photo_id`,`users`.`email` AS `email`,`users`.`nickname` AS `nickname`,`users`.`sex` AS `sex`,((year(now()) - year(`users`.`birthdate`)) - (date_format(now(),'%m%d') < date_format(`users`.`birthdate`,'%m%d'))) AS `age`,`users`.`role` AS `role` from `users`;
-USE `weblog`;
+DROP VIEW IF EXISTS `discussion_website`.`identities` ;
+DROP TABLE IF EXISTS `discussion_website`.`identities`;
+USE `discussion_website`;
+CREATE  OR REPLACE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `identities` AS select `users`.`id` AS `id`,`users`.`photo_id` AS `photo_id`,`users`.`email` AS `email`,`users`.`nickname` AS `nickname`,`users`.`gender` AS `gender`,((year(now()) - year(`users`.`birthdate`)) - (date_format(now(),'%m%d') < date_format(`users`.`birthdate`,'%m%d'))) AS `age`,`users`.`role` AS `role` from `users`;
+USE `discussion_website`;
 
 DELIMITER $$
 
-USE `weblog`$$
-DROP TRIGGER IF EXISTS `weblog`.`user_images_auto_increment` $$
-USE `weblog`$$
+USE `discussion_website`$$
+DROP TRIGGER IF EXISTS `discussion_website`.`user_images_auto_increment` $$
+USE `discussion_website`$$
 CREATE TRIGGER `user_images_auto_increment` BEFORE INSERT ON `user_images` FOR EACH ROW
 BEGIN
     DECLARE max_id INT(10); 
@@ -510,9 +510,9 @@ SELECT `user_images`.`id` FROM `user_images` WHERE `user_images`.`user_id` = NEW
 END$$
 
 
-USE `weblog`$$
-DROP TRIGGER IF EXISTS `weblog`.`comments_auto_increment` $$
-USE `weblog`$$
+USE `discussion_website`$$
+DROP TRIGGER IF EXISTS `discussion_website`.`comments_auto_increment` $$
+USE `discussion_website`$$
 CREATE TRIGGER `comments_auto_increment` BEFORE INSERT ON `comments` FOR EACH ROW
 BEGIN
     DECLARE max_id INT(10); 
@@ -522,9 +522,9 @@ SELECT `comments`.`id` FROM `comments` WHERE `comments`.`post_id` = NEW.`post_id
 END$$
 
 
-USE `weblog`$$
-DROP TRIGGER IF EXISTS `weblog`.`messages_auto_increment` $$
-USE `weblog`$$
+USE `discussion_website`$$
+DROP TRIGGER IF EXISTS `discussion_website`.`messages_auto_increment` $$
+USE `discussion_website`$$
 CREATE TRIGGER `messages_auto_increment` BEFORE INSERT ON `messages` FOR EACH ROW
 BEGIN
     DECLARE max_id INT(10); 
@@ -534,9 +534,9 @@ SELECT `messages`.`id` FROM `messages` WHERE `messages`.`user_id` = NEW.`recipie
 END$$
 
 
-USE `weblog`$$
-DROP TRIGGER IF EXISTS `weblog`.`post_images_auto_increment` $$
-USE `weblog`$$
+USE `discussion_website`$$
+DROP TRIGGER IF EXISTS `discussion_website`.`post_images_auto_increment` $$
+USE `discussion_website`$$
 CREATE TRIGGER `post_images_auto_increment` BEFORE INSERT ON `post_images` FOR EACH ROW
 BEGIN
     DECLARE max_id INT(10); 
@@ -546,9 +546,9 @@ SELECT `post_images`.`id` FROM `post_images` WHERE `post_images`.`post_id` = NEW
 END$$
 
 
-USE `weblog`$$
-DROP TRIGGER IF EXISTS `weblog`.`comment_images_auto_increment` $$
-USE `weblog`$$
+USE `discussion_website`$$
+DROP TRIGGER IF EXISTS `discussion_website`.`comment_images_auto_increment` $$
+USE `discussion_website`$$
 CREATE TRIGGER `comment_images_auto_increment` BEFORE INSERT ON `comment_images` FOR EACH ROW
 BEGIN
     DECLARE max_id INT(10); 
@@ -557,6 +557,7 @@ SELECT `comment_images`.`id` FROM `comment_images` WHERE `comment_images`.`comme
     SET NEW.`id` = IF(ISNULL(max_id), 1, max_id + 1);
 END$$
 
+INSERT INTO `categories` VALUES (1,'social','Společenské'),(2,'professional','Odborné'),(3,'cultural','Kulturní');
 
 DELIMITER ;
 

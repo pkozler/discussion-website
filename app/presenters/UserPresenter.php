@@ -68,12 +68,12 @@ class UserPresenter extends BasePresenter
 		->setRequired('Prosím uveďte věk.')
 		->setAttribute('type', 'number');
 	
-		$sex = array(
+		$gender = array(
 				'male' => 'muž',
 				'female' => 'žena',
 		);
 	
-		$form->addRadioList('sex', 'Pohlaví:', $sex)
+		$form->addRadioList('gender', 'Pohlaví:', $gender)
 		->setRequired('Prosím uveďte pohlaví.')
 		->getSeparatorPrototype()->setName(NULL);
 	
@@ -155,16 +155,16 @@ class UserPresenter extends BasePresenter
 			$ageInput->setDisabled()->setDefaultValue($this->getUser()->getIdentity()->data['age']);
 		}
 		
-		$sex = array(
+		$gender = array(
 				'male' => 'muž',
 				'female' => 'žena',
 		);
-		$sexInput = $form->addSelect('sex', 'Pohlaví:', $sex);
+		$genderInput = $form->addSelect('gender', 'Pohlaví:', $gender);
 		
-		$sexInput->setPrompt('');
+		$genderInput->setPrompt('');
 		
 		if ($this->getUser()->isLoggedIn()) {
-			$sexInput->setDisabled()->setDefaultValue($this->getUser()->getIdentity()->data['sex']);
+			$genderInput->setDisabled()->setDefaultValue($this->getUser()->getIdentity()->data['gender']);
 		}
 
 		$form->addSubmit('send', 'Vložit vzkaz');

@@ -174,16 +174,16 @@ class PostPresenter extends BasePresenter
 			$ageInput->setDisabled()->setDefaultValue($this->getUser()->getIdentity()->data['age']);
 		}
 		
-		$sex = array(
+		$gender = array(
 				'male' => 'muž',
 				'female' => 'žena',
 		);
-		$sexInput = $form->addSelect('sex', 'Pohlaví:', $sex);
+		$genderInput = $form->addSelect('gender', 'Pohlaví:', $gender);
 		
-		$sexInput->setPrompt('');
+		$genderInput->setPrompt('');
 		
 		if ($this->getUser()->isLoggedIn()) {
-			$sexInput->setDisabled()->setDefaultValue($this->getUser()->getIdentity()->data['sex']);
+			$genderInput->setDisabled()->setDefaultValue($this->getUser()->getIdentity()->data['gender']);
 		}
 		
 		if ($post) {

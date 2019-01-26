@@ -6,9 +6,9 @@ parameters:
 
 
 database:
-	dsn: 'mysql:host=127.0.0.1;dbname=weblog'
+	dsn: 'mysql:host=127.0.0.1;dbname=discussion_website'
 	user: root
-	password: 
+	password: mysql
 	options:
 		lazy: yes
 

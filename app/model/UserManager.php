@@ -26,7 +26,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		COLUMN_PASSWORD_TOKEN_HASH = 'password_token',
 		COLUMN_PASSWORD_TOKEN_HASH_VALIDITY = 'password_token_validity',
 		COLUMN_NAME = 'nickname',
-		COLUMN_SEX = 'sex',
+		COLUMN_GENDER = 'gender',
 		COLUMN_BIRTHDATE = 'birthdate',
 		COLUMN_ACTIVATED = 'activated',
 		COLUMN_TOKEN_RESEND_BLOCKED = 'token_resend_blocked',
@@ -240,7 +240,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 		
 		// vytvoření e-mailu
 		$mail = new Message;
-		$mail->setFrom('Kybersvět <info@kybersvet.cz>')
+		$mail->setFrom('Diskusní web <info@diskusniweb.cz>')
 		->addTo($email)
 		->setHtmlBody($latte->renderToString($path, $params));
 		
@@ -265,7 +265,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator
 					self::COLUMN_EMAIL => $values->email,
 					self::COLUMN_PASSWORD_HASH => Passwords::hash($values->password),
 					self::COLUMN_NAME => $values->nickname,
-					self::COLUMN_SEX => $values->sex,
+					self::COLUMN_GENDER => $values->gender,
 					self::COLUMN_BIRTHDATE => $date,
 			));
 		} catch (Nette\Database\UniqueConstraintViolationException $e) {
